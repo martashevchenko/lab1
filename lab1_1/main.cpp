@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+
 bool isPrime(int i){
     if(i>1){
         for (int k=2; k<i; ++i) {
