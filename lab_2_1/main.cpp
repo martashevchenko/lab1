@@ -5,7 +5,7 @@ struct DATABASE
     char user[size];
     char pass[size];
     bool isAdmin;
-};
+}part;
 
 struct  HOSPITAL
 {
@@ -74,8 +74,10 @@ DATABASE *findLogin(char a[])
     return NULL;
 }
 
-void logIn(char login[], char password[], DATABASE part)
+DATABASE *logIn( )
 {
+    char login[size];
+    char password[size];
     std::cout<<"Enter a login ";
     std::cin>>login;
     while(!findLogin(login))
@@ -96,12 +98,14 @@ void logIn(char login[], char password[], DATABASE part)
         if (isEqual(thisUser->pass,password))
         {
             std::cout<<"You've entered";
+            return thisUser;
 
         }
         else
         {
             std::cout<<"You've entered a wrong password";
         }
+
     }
 }
 
@@ -126,11 +130,11 @@ void signUp( DATABASE part)
         std::cin >> ch;
         if (ch==1)
         {
-            part.isAdmin==0;
+            part.isAdmin=0;
         }
         if (ch==2)
         {
-            part.isAdmin==1;
+            part.isAdmin=1;
         }
         fwrite(&part, sizeof(part), 1, f);
     }
@@ -148,7 +152,8 @@ void menuDepartment()
     std::cout<<"1 - Show all departments"<<std::endl;
     std::cout<<"2 - Chose a department"<<std::endl;
     std::cout<<"3 - Delete a department"<<std::endl;
-    std::cout<<"4 - Exit";
+    std::cout<<"4 - Exit"<<std::endl;
+    std::cout<<"5 - Update a patient";
 }
 
 void addDepartment()
@@ -329,9 +334,71 @@ void choseDepartment()
     }
 }
 
-void menuAuthentication(DATABASE part)
+void updateIdDepartment(int p)
 {
-    if (part.isAdmin == 0)
+    FILE *fp3;
+    fopen_s(&fp3, "patient.dat", "ab");
+    fseek(fp3, 0, SEEK_END);
+    if (p==patient.id)
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            std::cout << "New department ID - ";
+            std::cin >> patient.idDepartment;
+            fwrite(&patient, sizeof(patient), 1, fp3);
+
+        }
+    }
+    fclose(fp3);
+
+}
+
+void updatePatient()
+{
+    FILE *fp2;
+    fopen_s(&fp2, "patient.dat", "r+b");
+    fseek(fp2, 0, SEEK_END);
+    long pos = ftell(fp2);
+    fseek(fp2, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT* patient = new PATIENT[count];
+    fread(patient, sizeof(PATIENT), count, fp2);
+    std::cout<<"Enter ID of the patient, you want to edit";
+    int p;
+    std::cin>>p;
+    for (int i = 0; i < count; i++)
+    {
+        if (p==patient[i].id)
+        {
+            std::cout<<patient[i].id<<".";
+            std::cout<<patient[i].name<<std::endl;
+            std::cout<<patient[i].idDepartment<<std::endl;
+            std::cout<<patient[i].diagnos<<std::endl;
+            std::cout<<patient[i].operations<<std::endl;
+            std::cout<<patient[i].procedures<<std::endl;
+            std::cout<<patient[i].pills<<std::endl;
+        }
+    }
+    fclose(fp2);
+    std::cout<<"Enter what exactly you want to chose"<<std::endl;
+    std::cout<<"Department ID - 0"<<std::endl;
+    std::cout<<"Diagnos - 1"<<std::endl;
+    std::cout<<"Operations - 2"<<std::endl;
+    std::cout<<"Procedures - 3"<<std::endl;
+    std::cout<<"Pills - 4"<<std::endl;
+    int g;
+    std::cin>>g;
+    switch(g)
+    {
+        case 0: updateIdDepartment(p);
+
+    }
+
+}
+
+void menuAuthentication(DATABASE *part)
+{
+    if (part->isAdmin == 0)
     {
         int n;
         while (true)
@@ -350,10 +417,15 @@ void menuAuthentication(DATABASE part)
                     break;
                 case 4:
                     exit(0);
+                    break;
+                case 5:
+                    updatePatient();
+
+
             }
         }
     }
-    if (part.isAdmin == 1)
+    else if (part->isAdmin == 1)
     {
         std::cout << "Enter an ID of the patient you want to find";
         searchPatient();
@@ -368,15 +440,16 @@ void menuAuthentication(DATABASE part)
 
 }
 
+
+
 int main()
 {
     FILE *f;
     f = fopen("user.dat", "ab");
     fseek(f, 0, SEEK_END);
     int m;
-    char login[size];
-    char password[size];
-    DATABASE part;
+    /*DATABASE part;*/
+    DATABASE *Login;
     menuAuthorization();
     std::cin>>m;
     if (m==2)
@@ -386,9 +459,10 @@ int main()
     fclose(f);
     if (m==1)
     {
-        logIn(login, password, part);
+        Login=logIn();
+        menuAuthentication(Login);
     }
-    menuAuthentication(part);
+
 
     return 0;
 }
