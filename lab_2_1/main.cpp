@@ -1,5 +1,5 @@
 #include <iostream>
-const int size =10;
+const int size =20;
 struct DATABASE
         {
     char user[size];
@@ -352,6 +352,78 @@ void updateIdDepartment(int p)
     fclose(fp3);
 
 }
+void updateDiagnos(int p)
+{
+    FILE *fp4;
+    fopen_s(&fp4, "patient.dat", "ab");
+    fseek(fp4, 0, SEEK_END);
+    if (p==patient.id)
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            std::cout << "New diagnos - ";
+            std::cin >> patient.diagnos;
+            fwrite(&patient, sizeof(patient), 1, fp4);
+
+        }
+    }
+    fclose(fp4);
+
+}
+
+void updateOperations(int p)
+{
+    FILE *fp5;
+    fopen_s(&fp5, "patient.dat", "ab");
+    fseek(fp5, 0, SEEK_END);
+    if (p==patient.id)
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            std::cout << "New operation - ";
+            std::cin >> patient.operations;
+            fwrite(&patient, sizeof(patient), 1, fp5);
+
+        }
+    }
+    fclose(fp5);
+}
+
+void updateProcedures(int p)
+{
+    FILE *fp6;
+    fopen_s(&fp6, "patient.dat", "ab");
+    fseek(fp6, 0, SEEK_END);
+    if (p==patient.id)
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            std::cout << "New procedure - ";
+            std::cin >> patient.procedures;
+            fwrite(&patient, sizeof(patient), 1, fp6);
+
+        }
+    }
+    fclose(fp6);
+}
+
+void updatePills(int p)
+{
+    FILE *fp7;
+    fopen_s(&fp7, "patient.dat", "ab");
+    fseek(fp7, 0, SEEK_END);
+    if (p==patient.id)
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            std::cout << "New pills - ";
+            std::cin >> patient.pills;
+            fwrite(&patient, sizeof(patient), 1, fp7);
+
+        }
+    }
+    fclose(fp7);
+}
 
 void updatePatient()
 {
@@ -391,7 +463,10 @@ void updatePatient()
     switch(g)
     {
         case 0: updateIdDepartment(p);
-
+        case 1: updateDiagnos(p);
+        case 2: updateOperations(p);
+        case 3: updateProcedures(p);
+        case 4: updatePills(p);
     }
 
 }
