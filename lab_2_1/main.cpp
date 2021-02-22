@@ -11,6 +11,7 @@ struct  HOSPITAL
 {
     int id;
     char name[size];
+    bool isDeleted = false;
 }department;
 
 struct PATIENT
@@ -22,7 +23,33 @@ struct PATIENT
     char operations[size];
     char procedures [size];
     char pills[size];
+    bool isDeleted = false;
 } patient;
+
+void ResaveDB() {
+    FILE *fp;
+    fopen_s(&fp, "patient.dat", "rb");
+    if (!fp) {
+        return;
+    }
+    FILE *fp2;
+    fopen_s(&fp2, "patient_copy.dat", "wb");
+    fseek(fp, 0, SEEK_SET);
+
+    PATIENT part;
+    fread(&part, sizeof(part), 1, fp);
+    while (!feof(fp)) {
+        if (!part.isDeleted) {
+            fwrite(&part, sizeof(part), 1, fp2);
+        }
+        fread(&part, sizeof(part), 1, fp);
+    }
+
+    fclose(fp);
+    fclose(fp2);
+    remove("patient.dat");
+    rename("patient_copy.dat", "patient.dat");
+}
 
 bool isEqual(char s1[], char s2[])
         {
@@ -244,7 +271,29 @@ void addPatient()
 
 void deletePatient()
 {
-
+    FILE *fp8;
+    fopen_s(&fp8, "patient.dat", "r+b");
+    fseek(fp8, 0, SEEK_END);
+    long pos = ftell(fp8);
+    fseek(fp8, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT* patient = new PATIENT[count];
+    fread(patient, sizeof(PATIENT), count, fp8);
+    std::cout<<"Enter ID of the patient, you want to find";
+    int p;
+    std::cin>>p;
+    for (int i = 0; i <= count; i++) {
+        if (patient[i].id == p) {
+            patient[i].isDeleted = true;
+            fseek(fp8, sizeof(patient)*(i), SEEK_SET);
+            fwrite(&patient[i], sizeof(patient[i]), 1, fp8);
+            delete[] patient;
+            fclose(fp8);
+            return;
+        }
+    }
+    fclose(fp8);
+    return;
 }
 
 void showPatientList(int a)
@@ -352,6 +401,7 @@ void updateIdDepartment(int p)
     fclose(fp3);
 
 }
+
 void updateDiagnos(int p)
 {
     FILE *fp4;
@@ -514,6 +564,7 @@ void menuAuthentication(DATABASE *part)
     }
 
 }
+
 
 
 
