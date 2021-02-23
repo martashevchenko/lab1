@@ -115,7 +115,7 @@ DATABASE *logIn( )
     DATABASE *thisUser=findLogin(login);
     if (!thisUser)
     {
-        std::cout<<"There is no user with this login!";
+        std::cout<<"There is no user with this login!"<<std::endl;
     }
     else
     {
@@ -124,7 +124,7 @@ DATABASE *logIn( )
         std::cin>>password;
         if (isEqual(thisUser->pass,password))
         {
-            std::cout<<"You've entered";
+            std::cout<<"You've entered"<<std::endl;
             return thisUser;
 
         }
@@ -145,7 +145,7 @@ void signUp( DATABASE part)
         int ch;
         std::cout << "Enter a login ";
         std::cin >> part.user;
-        while (findLogin(part.user))
+        while (!findLogin(part.user))
         {
             std::cout<<"This login is already exists! Please enter new!";
             std::cin>>part.user;
@@ -175,12 +175,11 @@ void menuAuthorization()
 
 void menuDepartment()
 {
-    std::cout<<"0 - Add new department"<<std::endl;
+    std::cout<<std::endl<<"0 - Add new department"<<std::endl;
     std::cout<<"1 - Show all departments"<<std::endl;
     std::cout<<"2 - Chose a department"<<std::endl;
     std::cout<<"3 - Delete a department"<<std::endl;
     std::cout<<"4 - Exit"<<std::endl;
-    std::cout<<"5 - Update a patient";
 }
 
 void addDepartment()
@@ -237,7 +236,8 @@ void menuPatient()
     std::cout<<"Add new patient - 0"<<std::endl;
     std::cout<<"Show the patient list - 1"<<std::endl;
     std::cout<<"Delete a patient - 2"<<std::endl;
-    std::cout<<"Find a patient - 3";
+    std::cout<<"Find a patient - 3"<<std::endl;
+    std::cout<<"Update a patient - 4"<<std::endl;
 }
 
 void addPatient()
@@ -279,7 +279,7 @@ void deletePatient()
     int count = pos / sizeof(PATIENT);
     PATIENT* patient = new PATIENT[count];
     fread(patient, sizeof(PATIENT), count, fp8);
-    std::cout<<"Enter ID of the patient, you want to find";
+    std::cout<<"Enter ID of the patient, you want to delete";
     int p;
     std::cin>>p;
     for (int i = 0; i <= count; i++) {
@@ -293,7 +293,6 @@ void deletePatient()
         }
     }
     fclose(fp8);
-    return;
 }
 
 void showPatientList(int a)
@@ -333,7 +332,6 @@ void searchPatient()
     int count = pos / sizeof(PATIENT);
     PATIENT* patient = new PATIENT[count];
     fread(patient, sizeof(PATIENT), count, fp1);
-    std::cout<<"Enter ID of the patient, you want to find";
     int p;
     std::cin>>p;
     for (int i = 0; i < count; i++)
@@ -351,6 +349,179 @@ void searchPatient()
 
     }
     fclose(fp1);
+}
+
+void updateIdDepartment(int p)
+{
+    std::cout<<"I'm in"<<std::endl;
+    FILE *fp3;
+    fopen_s(&fp3, "patient.dat", "r+b");
+    fseek(fp3, 0, SEEK_END);
+    long pos = ftell(fp3);
+    fseek(fp3, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT *patient1 = new PATIENT[count];
+    fread(patient1, sizeof(PATIENT), count, fp3);
+    for (int i = 0; i <=count; i++)
+    {
+        std::cout<<"count"<<count;
+        std::cout<<"patient id - "<<patient1[i].id<<std::endl;
+        std::cout<<"p ="<<p<<std::endl;
+        if (patient1[i].id == p)
+        {
+            std::cout<<"I'm in 2"<<std::endl;
+            std::cout<<"Enter a new ID department - ";
+            std::cin>>patient1[i].idDepartment;
+            fseek(fp3, sizeof(patient1)*(i), SEEK_SET);
+            fwrite(&patient1[i], sizeof(patient1[i]), 1, fp3);
+            break;
+        }
+    }
+    std::cout<<"count"<<count;
+    fclose(fp3);
+}
+
+void updateDiagnos(int p)
+{
+    FILE *fp4;
+    fopen_s(&fp4, "patient.dat", "r+b");
+    fseek(fp4, 0, SEEK_END);
+    long pos = ftell(fp4);
+    fseek(fp4, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT *patient2 = new PATIENT[count];
+    fread(patient2, sizeof(PATIENT), count, fp4);
+    for (int i = 0; i <=count; i++)
+    {
+        if (patient2[i].id == p)
+        {
+            std::cout<<"Enter a new diagnos - ";
+            std::cin>>patient2[i].diagnos;
+            fseek(fp4, sizeof(patient2)*(i), SEEK_SET);
+            fwrite(&patient2[i], sizeof(patient2[i]), 1, fp4);
+            break;
+        }
+    }
+    fclose(fp4);
+
+}
+
+void updateOperations(int p)
+{
+    FILE *fp5;
+    fopen_s(&fp5, "patient.dat", "r+b");
+    fseek(fp5, 0, SEEK_END);
+    long pos = ftell(fp5);
+    fseek(fp5, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT *patient3 = new PATIENT[count];
+    fread(patient3, sizeof(PATIENT), count, fp5);
+    for (int i = 0; i <=count; i++)
+    {
+        if (patient3[i].id == p)
+        {
+            std::cout<<"Enter a new operation - ";
+            std::cin>>patient3[i].operations;
+            fseek(fp5, sizeof(patient3)*(i), SEEK_SET);
+            fwrite(&patient3[i], sizeof(patient3[i]), 1, fp5);
+            break;
+        }
+    }
+    fclose(fp5);
+}
+
+void updateProcedures(int p)
+{
+    FILE *fp6;
+    fopen_s(&fp6, "patient.dat", "r+b");
+    fseek(fp6, 0, SEEK_END);
+    long pos = ftell(fp6);
+    fseek(fp6, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT *patient4 = new PATIENT[count];
+    fread(patient4, sizeof(PATIENT), count, fp6);
+    for (int i = 0; i <=count; i++)
+    {
+        if (patient4[i].id == p)
+        {
+            std::cout<<"Enter a new procedure - ";
+            std::cin>>patient4[i].procedures;
+            fseek(fp6, sizeof(patient4)*(i), SEEK_SET);
+            fwrite(&patient4[i], sizeof(patient4[i]), 1, fp6);
+            break;
+        }
+    }
+    fclose(fp6);
+}
+
+void updatePills(int p)
+{
+    FILE *fp7;
+    fopen_s(&fp7, "patient.dat", "r+b");
+    fseek(fp7, 0, SEEK_END);
+    long pos = ftell(fp7);
+    fseek(fp7, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT *patient4 = new PATIENT[count];
+    fread(patient4, sizeof(PATIENT), count, fp7);
+    for (int i = 0; i <=count; i++)
+    {
+        if (patient4[i].id == p)
+        {
+            std::cout<<"Enter a new operation - ";
+            std::cin>>patient4[i].operations;
+            fseek(fp7, sizeof(patient4)*(i), SEEK_SET);
+            fwrite(&patient4[i], sizeof(patient4[i]), 1, fp7);
+            break;
+        }
+    }
+    fclose(fp7);
+
+}
+
+void updatePatient()
+{
+    FILE *fp2;
+    fopen_s(&fp2, "patient.dat", "ab");
+    fseek(fp2, 0, SEEK_END);
+    long pos = ftell(fp2);
+    fseek(fp2, 0, SEEK_SET);
+    int count = pos / sizeof(PATIENT);
+    PATIENT* patient = new PATIENT[count];
+    fread(patient, sizeof(PATIENT), count, fp2);
+    std::cout<<"Enter ID of the patient, you want to edit";
+    int p;
+    std::cin>>p;
+    for (int i = 0; i < count; i++)
+    {
+        if (p==patient[i].id)
+        {
+            std::cout<<patient[i].id<<".";
+            std::cout<<patient[i].name<<std::endl;
+            std::cout<<patient[i].idDepartment<<std::endl;
+            std::cout<<patient[i].diagnos<<std::endl;
+            std::cout<<patient[i].operations<<std::endl;
+            std::cout<<patient[i].procedures<<std::endl;
+            std::cout<<patient[i].pills<<std::endl;
+        }
+    }
+    fclose(fp2);
+    std::cout<<"Enter what exactly you want to change"<<std::endl;
+    std::cout<<"Department ID - 0"<<std::endl;
+    std::cout<<"Diagnos - 1"<<std::endl;
+    std::cout<<"Operations - 2"<<std::endl;
+    std::cout<<"Procedures - 3"<<std::endl;
+    std::cout<<"Pills - 4"<<std::endl;
+    int g;
+    std::cin>>g;
+    switch(g)
+    {
+        case 0: updateIdDepartment(p);
+        case 1: updateDiagnos(p);
+        case 2: updateOperations(p);
+        case 4: updateProcedures(p);
+        case 5: updatePills(p);
+    }
 }
 
 void choseDepartment()
@@ -379,146 +550,10 @@ void choseDepartment()
     {
         case 0: addPatient(); break;
         case 1: showPatientList(a); break;
-        case 2: deletePatient(); break;
+        case 2: deletePatient(); ResaveDB(); break;
+        case 3: searchPatient(); break;
+        case 4: updatePatient();
     }
-}
-
-void updateIdDepartment(int p)
-{
-    FILE *fp3;
-    fopen_s(&fp3, "patient.dat", "ab");
-    fseek(fp3, 0, SEEK_END);
-    if (p==patient.id)
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            std::cout << "New department ID - ";
-            std::cin >> patient.idDepartment;
-            fwrite(&patient, sizeof(patient), 1, fp3);
-
-        }
-    }
-    fclose(fp3);
-
-}
-
-void updateDiagnos(int p)
-{
-    FILE *fp4;
-    fopen_s(&fp4, "patient.dat", "ab");
-    fseek(fp4, 0, SEEK_END);
-    if (p==patient.id)
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            std::cout << "New diagnos - ";
-            std::cin >> patient.diagnos;
-            fwrite(&patient, sizeof(patient), 1, fp4);
-
-        }
-    }
-    fclose(fp4);
-
-}
-
-void updateOperations(int p)
-{
-    FILE *fp5;
-    fopen_s(&fp5, "patient.dat", "ab");
-    fseek(fp5, 0, SEEK_END);
-    if (p==patient.id)
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            std::cout << "New operation - ";
-            std::cin >> patient.operations;
-            fwrite(&patient, sizeof(patient), 1, fp5);
-
-        }
-    }
-    fclose(fp5);
-}
-
-void updateProcedures(int p)
-{
-    FILE *fp6;
-    fopen_s(&fp6, "patient.dat", "ab");
-    fseek(fp6, 0, SEEK_END);
-    if (p==patient.id)
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            std::cout << "New procedure - ";
-            std::cin >> patient.procedures;
-            fwrite(&patient, sizeof(patient), 1, fp6);
-
-        }
-    }
-    fclose(fp6);
-}
-
-void updatePills(int p)
-{
-    FILE *fp7;
-    fopen_s(&fp7, "patient.dat", "ab");
-    fseek(fp7, 0, SEEK_END);
-    if (p==patient.id)
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            std::cout << "New pills - ";
-            std::cin >> patient.pills;
-            fwrite(&patient, sizeof(patient), 1, fp7);
-
-        }
-    }
-    fclose(fp7);
-}
-
-void updatePatient()
-{
-    FILE *fp2;
-    fopen_s(&fp2, "patient.dat", "r+b");
-    fseek(fp2, 0, SEEK_END);
-    long pos = ftell(fp2);
-    fseek(fp2, 0, SEEK_SET);
-    int count = pos / sizeof(PATIENT);
-    PATIENT* patient = new PATIENT[count];
-    fread(patient, sizeof(PATIENT), count, fp2);
-    std::cout<<"Enter ID of the patient, you want to edit";
-    int p;
-    std::cin>>p;
-    for (int i = 0; i < count; i++)
-    {
-        if (p==patient[i].id)
-        {
-            std::cout<<patient[i].id<<".";
-            std::cout<<patient[i].name<<std::endl;
-            std::cout<<patient[i].idDepartment<<std::endl;
-            std::cout<<patient[i].diagnos<<std::endl;
-            std::cout<<patient[i].operations<<std::endl;
-            std::cout<<patient[i].procedures<<std::endl;
-            std::cout<<patient[i].pills<<std::endl;
-        }
-    }
-    fclose(fp2);
-    std::cout<<"Enter what exactly you want to chose"<<std::endl;
-    std::cout<<"Department ID - 0"<<std::endl;
-    std::cout<<"Diagnos - 1"<<std::endl;
-    std::cout<<"Operations - 2"<<std::endl;
-    std::cout<<"Procedures - 3"<<std::endl;
-    std::cout<<"Pills - 4"<<std::endl;
-    int g;
-    std::cin>>g;
-    switch(g)
-    {
-        case 0: updateIdDepartment(p);
-        case 1: updateDiagnos(p);
-        case 2: updateOperations(p);
-        case 3: updateProcedures(p);
-        case 4: updatePills(p);
-    }
-
 }
 
 void menuAuthentication(DATABASE *part)
@@ -565,9 +600,6 @@ void menuAuthentication(DATABASE *part)
 
 }
 
-
-
-
 int main()
 {
     FILE *f;
@@ -588,8 +620,6 @@ int main()
         Login=logIn();
         menuAuthentication(Login);
     }
-
-
     return 0;
 }
 
