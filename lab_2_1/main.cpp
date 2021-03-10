@@ -1,5 +1,6 @@
 #include <iostream>
 const int size =20;
+
 struct DATABASE
         {
     char user[size];
@@ -209,26 +210,13 @@ void showDepartment()
     fseek(filename, 0, SEEK_SET);
     int count = pos / sizeof(HOSPITAL);
     HOSPITAL* department = new HOSPITAL[count];
-    fread(department, sizeof(DATABASE), count, filename);
+    fread(department, sizeof(HOSPITAL), count, filename);
     for (int i = 0; i < count; i++)
     {
         std::cout<<department[i].id<<".";
         std::cout<<department[i].name<<std::endl;
     }
     fclose(filename);
-}
-
-void deleteDepartment(char a[])
-{
-    FILE *filename;
-    fopen_s(&filename, "department.dat", "rb");
-    fseek(filename, 0, SEEK_END);
-    std::cout<<"Enter a name of department, which you want to be deleted - ";
-    std::cin>>a;
-
-
-
-
 }
 
 void menuPatient()
@@ -309,13 +297,13 @@ void showPatientList(int a)
     {
         if (a==patient[i].idDepartment)
         {
-            std::cout<<patient[i].id<<".";
-            std::cout<<patient[i].name<<std::endl;
-            std::cout<<patient[i].idDepartment<<std::endl;
-            std::cout<<patient[i].diagnos<<std::endl;
-            std::cout<<patient[i].operations<<std::endl;
-            std::cout<<patient[i].procedures<<std::endl;
-            std::cout<<patient[i].pills<<std::endl;
+            std::cout<<"ID -  "<<patient[i].id<<".";
+            std::cout<<"Name -  "<<patient[i].name<<std::endl;
+            std::cout<<"ID Department - "<<patient[i].idDepartment<<std::endl;
+            std::cout<<"Diagnos - "<<patient[i].diagnos<<std::endl;
+            std::cout<<"Operations - "<<patient[i].operations<<std::endl;
+            std::cout<<"Procedures - "<<patient[i].procedures<<std::endl;
+            std::cout<<"Pills - "<<patient[i].pills<<std::endl;
         }
 
     }
@@ -338,13 +326,13 @@ void searchPatient()
     {
         if (p==patient[i].id)
         {
-            std::cout<<patient[i].id<<".";
-            std::cout<<patient[i].name<<std::endl;
-            std::cout<<patient[i].idDepartment<<std::endl;
-            std::cout<<patient[i].diagnos<<std::endl;
-            std::cout<<patient[i].operations<<std::endl;
-            std::cout<<patient[i].procedures<<std::endl;
-            std::cout<<patient[i].pills<<std::endl;
+            std::cout<<"ID -  "<<patient[i].id<<".";
+            std::cout<<"Name -  "<<patient[i].name<<std::endl;
+            std::cout<<"ID Department - "<<patient[i].idDepartment<<std::endl;
+            std::cout<<"Diagnos - "<<patient[i].diagnos<<std::endl;
+            std::cout<<"Operations - "<<patient[i].operations<<std::endl;
+            std::cout<<"Procedures - "<<patient[i].procedures<<std::endl;
+            std::cout<<"Pills - "<<patient[i].pills<<std::endl;
         }
 
     }
