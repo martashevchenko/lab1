@@ -211,12 +211,6 @@ void showDepartment()
     int count = pos / sizeof(HOSPITAL);
     HOSPITAL* department = new HOSPITAL[count];
     fread(department, sizeof(HOSPITAL), count, filename);
-    for (int i = 0; i < count; i++)
-    {
-        std::cout<<department[i].id<<".";
-        std::cout<<department[i].name<<std::endl;
-    }
-    fclose(filename);
 }
 
 void menuPatient()
@@ -610,7 +604,6 @@ int main()
     }
     return 0;
 }
-
 
 
 
