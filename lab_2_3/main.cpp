@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 const static int MAX = 100;
 
 struct Node
@@ -99,37 +100,29 @@ Node* addMatrices(Node* listA, Node* listB)
     {
         if (listA->row == listB->row)
         {
-            std::cout<<"I'm in if1"<<std::endl;
             if (listA->column == listB->column)
             {
-                std::cout<<"I'm in if2"<<std::endl;
                 createNewNode(&list3, listA->row, listA->column, listA->value + listB->value);
                 listA = listA->next;
                 listB = listB->next;
             } else {
-                std::cout<<"I'm in else1"<<std::endl;
                 if (listA->column < listB->column)
                 {
-                    std::cout<<"I'm in if3"<<std::endl;
                     createNewNode(&list3, listA->row, listA->column, listA->value);
                     listA = listA->next;
                 } else
                     {
-                        std::cout<<"I'm in else2"<<std::endl;
                     createNewNode(&list3, listB->row, listB->column, listB->value);
                         listB = listB->next;
                 }
             }
         } else {
-            std::cout<<"I'm in else3"<<std::endl;
             if (listA->row < listB->row)
             {
-                std::cout<<"I'm in if4"<<std::endl;
                 createNewNode(&list3, listA->row, listA->column, listA->value);
                 listA = listA->next;
             } else
                 {
-                    std::cout<<"I'm in else4"<<std::endl;
                 createNewNode(&list3, listB->row, listB->column, listB->value);
                     listB = listB->next;
             }
@@ -143,6 +136,7 @@ Node* addMatrices(Node* listA, Node* listB)
 
 int main()
 {
+    
 
     int sparseMatrixA[4][5] =
             { {0, 0, 3 , 0 , 4},
@@ -158,6 +152,22 @@ int main()
               { 0, 2, 0, 0, 0 }
             };
 
+    int sparseMatrixC[3][3] =
+            { {7, 0, 0},
+              {0, 0, 0},
+              {0, 0, 1}
+            };
+
+    int sparseMatrixF[2][3] =
+            { {1, 0, 0},
+              {-1, 0, 3}
+            };
+
+    int sparseMatrixG[2][3] =
+            { {0, 0, 0},
+              {0, 0, 0}
+            };
+
     Node *list1 = nullptr;
     for (int i=0; i<4; i++)
     {
@@ -169,6 +179,7 @@ int main()
             }
         }
     }
+
     Node* list2 = nullptr;
     for (int i=0; i<4; i++)
     {
@@ -180,6 +191,56 @@ int main()
             }
         }
     }
+
+    Node* list5 = nullptr;
+    for (int i=0; i<3; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            if (sparseMatrixC[i][j]!=0)
+            {
+                createNewNode(&list5, i, j, sparseMatrixC[i][j]);
+            }
+        }
+    }
+
+    Node* list4 = nullptr;
+    for(int i=0; i<2; i++)
+    {
+        for (int j=0; j<3; j++)
+        {
+            if (sparseMatrixF[i][j]!=0)
+            {
+                createNewNode(&list4, i, j, sparseMatrixF[i][j]);
+            }
+        }
+    }
+
+    for(int i=0; i<2; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            for(int k=0; k<3; k++)
+            {
+                sparseMatrixG[i][j] += sparseMatrixF[i][k]*sparseMatrixC[k][j];
+            }
+        }
+    }
+
+    Node* list6= nullptr;
+    for(int i=0; i<2; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            if (sparseMatrixG[i][j]!=0)
+            {
+                createNewNode(&list6, i, j, sparseMatrixG[i][j]);
+            }
+        }
+    }
+
+
+
     Node* list3;
     printNode(list1);
     std::cout<<std::endl;
@@ -188,6 +249,14 @@ int main()
     list3=addMatrices(list1, list2);
     std::cout<<std::endl;
     printNode(list3);
+    std::cout<<"\n";
+    printNode(list4);
+    std::cout<<std::endl;
+    printNode(list5);
+    std::cout<<std::endl;
+    printNode(list6);
+
+
 
     return 0;
 }
